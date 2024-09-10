@@ -1,3 +1,7 @@
+#include <stdbool.h>
+#include "action.h"
+#include "keycodes.h"
+#include "quantum.h"
 #include QMK_KEYBOARD_H
 
 // layers for windows
@@ -6,18 +10,11 @@
 #define _SYMBOLS 2
 
 // Custom keycodes for layer switching and dynamic symbols
-enum custom_keycodes {
-    TO_WIN = SAFE_RANGE,
-    TO_MAC,
-    PREV_WORD,
-    NEXT_WORD,
-    DELETE_WORD,
-};
+enum custom_keycodes { TO_WIN = SAFE_RANGE, TO_MAC, PREV_WORD, NEXT_WORD, DELETE_WORD, SELECT_LINE };
 
 enum combos {
     DELETE_WORD_COMBO,
 };
-
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //    ┌──────┬───┬──────┬──────┬───────────────┬───────────────┐                   ┌────────┬────────┬──────┬────┬───┬──────┐
@@ -76,32 +73,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                         KC_LCTL       , OSL(4)        ,                     TO_WIN  , TO_MAC                                       
 ),
 
-//    ┌─────────┬────┬───────────┬───────────┬─────┬─────┐                   ┌────────┬────────┬──────┬────┬─────┬─────────┐
-//    │   f12   │ f1 │    f2     │    f3     │ f4  │ f5  │                   │   f6   │   f7   │  f8  │ f9 │ f10 │   f11   │
-//    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├────────┼────────┼──────┼────┼─────┼─────────┤
-//    │  volu   │ {  │     (     │     )     │  }  │ ins │                   │  pgup  │   ~    │  _   │ `  │  :  │  mute   │
-//    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├────────┼────────┼──────┼────┼─────┼─────────┤
-//    │  vold   │ !  │     @     │     #     │  $  │  %  │                   │   ^    │   &    │  *   │ =  │  -  │    "    │
-//    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├────────┼────────┼──────┼────┼─────┼─────────┤
-//    │ QK_BOOT │ <  │     [     │     ]     │  >  │ del │                   │  pgdn  │   \    │  |   │ +  │  ?  │ LGUI(`) │
-//    └─────────┴────┼───────────┼───────────┼─────┴─────┘                   └────────┴────────┼──────┼────┼─────┴─────────┘
-//                   │ PREV_WORD │ NEXT_WORD │                                                 │ down │ up │                
-//                   └───────────┴───────────┼─────┬─────┐                   ┌────────┬────────┼──────┴────┘                
-//                                           │     │     │                   │        │        │                            
-//                                           ├─────┼─────┤                   ├────────┼────────┤                            
-//                                           │     │     │                   │        │        │                            
-//                                           ├─────┼─────┤                   ├────────┼────────┤                            
-//                                           │     │     │                   │ TO_WIN │ TO_MAC │                            
-//                                           └─────┴─────┘                   └────────┴────────┘                            
+//    ┌─────────┬────┬───────────┬───────────┬─────┬─────┐                   ┌─────────────┬────────┬──────┬────┬─────┬─────────┐
+//    │   f12   │ f1 │    f2     │    f3     │ f4  │ f5  │                   │     f6      │   f7   │  f8  │ f9 │ f10 │   f11   │
+//    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├─────────────┼────────┼──────┼────┼─────┼─────────┤
+//    │  volu   │ {  │     (     │     )     │  }  │ ins │                   │    pgup     │   ~    │  _   │ `  │  :  │  mute   │
+//    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├─────────────┼────────┼──────┼────┼─────┼─────────┤
+//    │  vold   │ !  │     @     │     #     │  $  │  %  │                   │      ^      │   &    │  *   │ =  │  -  │    "    │
+//    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├─────────────┼────────┼──────┼────┼─────┼─────────┤
+//    │ QK_BOOT │ <  │     [     │     ]     │  >  │ del │                   │    pgdn     │   \    │  |   │ +  │  ?  │ LGUI(`) │
+//    └─────────┴────┼───────────┼───────────┼─────┴─────┘                   └─────────────┴────────┼──────┼────┼─────┴─────────┘
+//                   │ PREV_WORD │ NEXT_WORD │                                                      │ down │ up │                
+//                   └───────────┴───────────┼─────┬─────┐                   ┌─────────────┬────────┼──────┴────┘                
+//                                           │     │     │                   │             │        │                            
+//                                           ├─────┼─────┤                   ├─────────────┼────────┤                            
+//                                           │     │     │                   │ SELECT_LINE │        │                            
+//                                           ├─────┼─────┤                   ├─────────────┼────────┤                            
+//                                           │     │     │                   │   TO_WIN    │ TO_MAC │                            
+//                                           └─────┴─────┘                   └─────────────┴────────┘                            
 [_SYMBOLS] = LAYOUT_5x6(
-  KC_F12  , KC_F1   , KC_F2     , KC_F3     , KC_F4   , KC_F5   ,                     KC_F6   , KC_F7    , KC_F8   , KC_F9   , KC_F10  , KC_F11      ,
-  KC_VOLU , KC_LCBR , KC_LPRN   , KC_RPRN   , KC_RCBR , KC_INS  ,                     KC_PGUP , KC_TILDE , KC_UNDS , KC_GRV  , KC_COLN , KC_MUTE     ,
-  KC_VOLD , KC_EXLM , KC_AT     , KC_HASH   , KC_DLR  , KC_PERC ,                     KC_CIRC , KC_AMPR  , KC_ASTR , KC_EQL  , KC_MINS , KC_DQUO     ,
-  QK_BOOT , KC_LT   , KC_LBRC   , KC_RBRC   , KC_GT   , KC_DEL  ,                     KC_PGDN , KC_BSLS  , KC_PIPE , KC_PLUS , KC_QUES , LGUI(KC_GRV),
-                      PREV_WORD , NEXT_WORD ,                                                              KC_DOWN , KC_UP                           ,
-                                              KC_TRNS , KC_TRNS ,                     KC_TRNS , KC_TRNS                                              ,
-                                              KC_TRNS , KC_TRNS ,                     KC_TRNS , KC_TRNS                                              ,
-                                              KC_TRNS , KC_TRNS ,                     TO_WIN  , TO_MAC                                               
+  KC_F12  , KC_F1   , KC_F2     , KC_F3     , KC_F4   , KC_F5   ,                     KC_F6       , KC_F7    , KC_F8   , KC_F9   , KC_F10  , KC_F11      ,
+  KC_VOLU , KC_LCBR , KC_LPRN   , KC_RPRN   , KC_RCBR , KC_INS  ,                     KC_PGUP     , KC_TILDE , KC_UNDS , KC_GRV  , KC_COLN , KC_MUTE     ,
+  KC_VOLD , KC_EXLM , KC_AT     , KC_HASH   , KC_DLR  , KC_PERC ,                     KC_CIRC     , KC_AMPR  , KC_ASTR , KC_EQL  , KC_MINS , KC_DQUO     ,
+  QK_BOOT , KC_LT   , KC_LBRC   , KC_RBRC   , KC_GT   , KC_DEL  ,                     KC_PGDN     , KC_BSLS  , KC_PIPE , KC_PLUS , KC_QUES , LGUI(KC_GRV),
+                      PREV_WORD , NEXT_WORD ,                                                                  KC_DOWN , KC_UP                           ,
+                                              KC_TRNS , KC_TRNS ,                     KC_TRNS     , KC_TRNS                                              ,
+                                              KC_TRNS , KC_TRNS ,                     SELECT_LINE , KC_TRNS                                              ,
+                                              KC_TRNS , KC_TRNS ,                     TO_WIN      , TO_MAC                                               
 )
 };
 
@@ -111,22 +108,34 @@ combo_t        key_combos[]                 = {
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
-    switch(combo_index) {
+    switch (combo_index) {
         case DELETE_WORD_COMBO:
-        if (pressed) {
-            switch (get_highest_layer(layer_state)) {
-            case _WIN:
-                tap_code16(C(KC_BSPC));  // Ctrl + Backspace for Windows
-                break;
-            case _MAC:
-                tap_code16(A(KC_BSPC));  // Alt + Backspace for Mac
-                break;
-            default:
-                tap_code16(C(KC_BSPC));  // Default to Windows behavior
-                break;
+            if (pressed) {
+                switch (get_highest_layer(layer_state)) {
+                    case _WIN:
+                        register_code16(C(KC_BSPC));
+                        break;
+                    case _MAC:
+                        register_code16(A(KC_BSPC));
+                        break;
+                    default:
+                        register_code16(C(KC_BSPC));
+                        break;
+                }
+            } else {
+                switch (get_highest_layer(layer_state)) {
+                    case _WIN:
+                        unregister_code16(C(KC_BSPC));
+                        break;
+                    case _MAC:
+                        unregister_code16(A(KC_BSPC));
+                        break;
+                    default:
+                        unregister_code16(C(KC_BSPC));
+                        break;
+                }
             }
-        }
-        break;
+            break;
     }
 }
 
@@ -137,7 +146,6 @@ void to_win(void) {
     layer_off(_SYMBOLS);
 }
 
-
 void to_mac(void) {
     set_single_persistent_default_layer(_MAC);
     layer_on(_MAC);
@@ -145,57 +153,48 @@ void to_mac(void) {
     layer_off(_SYMBOLS);
 }
 
-void prev_word(void) {
-    if (layer_state_is(_MAC)) {
-        tap_code16(A(KC_LEFT));  // Option + Left Arrow for Mac
+enum { LEFT = 0, RIGHT = 1 };
+
+void adjacent_word(keyrecord_t *record, uint8_t direction) {
+    const uint8_t  kc     = direction == LEFT ? KC_LEFT : KC_RIGHT;
+    const uint16_t code16 = layer_state_is(_MAC) ? A(kc) : C(kc);
+    if (record->event.pressed) {
+        register_code16(code16);
     } else {
-        tap_code16(C(KC_LEFT));  // Ctrl + Left Arrow for Windows
+        unregister_code16(code16);
     }
 }
 
-void next_word(void) {
+void select_line(keyrecord_t *record) {
     if (layer_state_is(_MAC)) {
-        tap_code16(A(KC_RIGHT));  // Option + Left Arrow for Mac
+        // goto beginning of line then select to end of line
+        tap_code16(G(KC_LEFT));
+        tap_code16(S(G(KC_RIGHT)));
     } else {
-        tap_code16(C(KC_RIGHT));  // Ctrl + Left Arrow for Windows
+        tap_code16(KC_HOME);
+        tap_code16(S(KC_END));
     }
 }
-
-void select_line(void) {
-    if (layer_state_is(_MAC)) {
-        tap_code16(A(KC_LEFT));  // Option + Left Arrow for Mac
-    } else {
-        tap_code16(C(KC_LEFT));  // Ctrl + Left Arrow for Windows
-    }
-}
-
-
-
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case TO_WIN:
-            if (record->event.pressed) {
-                to_win();
-            }
+            to_win();
             return false;
         case TO_MAC:
-            if (record->event.pressed) {
-                to_mac();
-            }
+            to_mac();
+            return false;
         case PREV_WORD:
-            if (record->event.pressed) {
-                prev_word();
-            }
+            adjacent_word(record, LEFT);
             return false;
         case NEXT_WORD:
-            if (record->event.pressed) {
-                next_word();
-            }
+            adjacent_word(record, RIGHT);
             return false;
+        case SELECT_LINE:
+            select_line(record);
+            return false;
+
         default:
             return true;
     }
 }
-
-
