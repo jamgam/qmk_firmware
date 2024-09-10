@@ -79,7 +79,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //    ┌─────────┬────┬───────────┬───────────┬─────┬─────┐                   ┌────────┬────────┬──────┬────┬─────┬─────────┐
 //    │   f12   │ f1 │    f2     │    f3     │ f4  │ f5  │                   │   f6   │   f7   │  f8  │ f9 │ f10 │   f11   │
 //    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├────────┼────────┼──────┼────┼─────┼─────────┤
-//    │  volu   │ {  │     (     │     )     │  }  │ ins │                   │  pgup  │   t    │  _   │ `  │  :  │  mute   │
+//    │  volu   │ {  │     (     │     )     │  }  │ ins │                   │  pgup  │   ~    │  _   │ `  │  :  │  mute   │
 //    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├────────┼────────┼──────┼────┼─────┼─────────┤
 //    │  vold   │ !  │     @     │     #     │  $  │  %  │                   │   ^    │   &    │  *   │ =  │  -  │    "    │
 //    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├────────┼────────┼──────┼────┼─────┼─────────┤
@@ -94,20 +94,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //                                           │     │     │                   │ TO_WIN │ TO_MAC │                            
 //                                           └─────┴─────┘                   └────────┴────────┘                            
 [_SYMBOLS] = LAYOUT_5x6(
-  KC_F12  , KC_F1   , KC_F2     , KC_F3     , KC_F4   , KC_F5   ,                     KC_F6   , KC_F7   , KC_F8   , KC_F9   , KC_F10  , KC_F11      ,
-  KC_VOLU , KC_LCBR , KC_LPRN   , KC_RPRN   , KC_RCBR , KC_INS  ,                     KC_PGUP , KC_T    , KC_UNDS , KC_GRV  , KC_COLN , KC_MUTE     ,
-  KC_VOLD , KC_EXLM , KC_AT     , KC_HASH   , KC_DLR  , KC_PERC ,                     KC_CIRC , KC_AMPR , KC_ASTR , KC_EQL  , KC_MINS , KC_DQUO     ,
-  QK_BOOT , KC_LT   , KC_LBRC   , KC_RBRC   , KC_GT   , KC_DEL  ,                     KC_PGDN , KC_BSLS , KC_PIPE , KC_PLUS , KC_QUES , LGUI(KC_GRV),
-                      PREV_WORD , NEXT_WORD ,                                                             KC_DOWN , KC_UP                           ,
-                                              KC_TRNS , KC_TRNS ,                     KC_TRNS , KC_TRNS                                             ,
-                                              KC_TRNS , KC_TRNS ,                     KC_TRNS , KC_TRNS                                             ,
-                                              KC_TRNS , KC_TRNS ,                     TO_WIN  , TO_MAC                                              
+  KC_F12  , KC_F1   , KC_F2     , KC_F3     , KC_F4   , KC_F5   ,                     KC_F6   , KC_F7    , KC_F8   , KC_F9   , KC_F10  , KC_F11      ,
+  KC_VOLU , KC_LCBR , KC_LPRN   , KC_RPRN   , KC_RCBR , KC_INS  ,                     KC_PGUP , KC_TILDE , KC_UNDS , KC_GRV  , KC_COLN , KC_MUTE     ,
+  KC_VOLD , KC_EXLM , KC_AT     , KC_HASH   , KC_DLR  , KC_PERC ,                     KC_CIRC , KC_AMPR  , KC_ASTR , KC_EQL  , KC_MINS , KC_DQUO     ,
+  QK_BOOT , KC_LT   , KC_LBRC   , KC_RBRC   , KC_GT   , KC_DEL  ,                     KC_PGDN , KC_BSLS  , KC_PIPE , KC_PLUS , KC_QUES , LGUI(KC_GRV),
+                      PREV_WORD , NEXT_WORD ,                                                              KC_DOWN , KC_UP                           ,
+                                              KC_TRNS , KC_TRNS ,                     KC_TRNS , KC_TRNS                                              ,
+                                              KC_TRNS , KC_TRNS ,                     KC_TRNS , KC_TRNS                                              ,
+                                              KC_TRNS , KC_TRNS ,                     TO_WIN  , TO_MAC                                               
 )
 };
 
 const uint16_t PROGMEM delete_word_combo[] = {KC_BSPC , KC_SPC, COMBO_END};
-combo_t key_combos[] = {
-  [DELETE_WORD_COMBO] = COMBO(delete_word_combo, KC_NO)  // KC_NO as we'll handle this in process_combo_event
+combo_t        key_combos[]                 = {
+    [DELETE_WORD_COMBO] = {.keys = &(delete_word_combo)[0], .keycode = (KC_NO)} // KC_NO as we'll handle this in process_combo_event
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
@@ -130,7 +130,7 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
     }
 }
 
-void to_win() {
+void to_win(void) {
     set_single_persistent_default_layer(_WIN);
     layer_on(_WIN);
     layer_off(_MAC);
@@ -138,14 +138,30 @@ void to_win() {
 }
 
 
-void to_mac() {
+void to_mac(void) {
     set_single_persistent_default_layer(_MAC);
     layer_on(_MAC);
     layer_off(_WIN);
     layer_off(_SYMBOLS);
 }
 
-void prev_word() {
+void prev_word(void) {
+    if (layer_state_is(_MAC)) {
+        tap_code16(A(KC_LEFT));  // Option + Left Arrow for Mac
+    } else {
+        tap_code16(C(KC_LEFT));  // Ctrl + Left Arrow for Windows
+    }
+}
+
+void next_word(void) {
+    if (layer_state_is(_MAC)) {
+        tap_code16(A(KC_RIGHT));  // Option + Left Arrow for Mac
+    } else {
+        tap_code16(C(KC_RIGHT));  // Ctrl + Left Arrow for Windows
+    }
+}
+
+void select_line(void) {
     if (layer_state_is(_MAC)) {
         tap_code16(A(KC_LEFT));  // Option + Left Arrow for Mac
     } else {
@@ -154,33 +170,27 @@ void prev_word() {
 }
 
 
+
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case TO_WIN:
             if (record->event.pressed) {
-                to_win(record);
+                to_win();
             }
             return false;
         case TO_MAC:
             if (record->event.pressed) {
-                to_mac(record);
+                to_mac();
             }
         case PREV_WORD:
             if (record->event.pressed) {
-                if (layer_state_is(_MAC)) {
-                    tap_code16(A(KC_LEFT));  // Option + Left Arrow for Mac
-                } else {
-                    tap_code16(C(KC_LEFT));  // Ctrl + Left Arrow for Windows
-                }
+                prev_word();
             }
             return false;
         case NEXT_WORD:
             if (record->event.pressed) {
-                if (layer_state_is(_MAC)) {
-                    tap_code16(A(KC_RIGHT));  // Option + Left Arrow for Mac
-                } else {
-                    tap_code16(C(KC_RIGHT));  // Ctrl + Left Arrow for Windows
-                }
+                next_word();
             }
             return false;
         default:
