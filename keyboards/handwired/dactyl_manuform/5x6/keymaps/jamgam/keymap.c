@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdint.h>
 #include "action.h"
 #include "keycodes.h"
 #include "quantum.h"
@@ -8,6 +9,7 @@
 #define _WIN 0
 #define _MAC 1
 #define _SYMBOLS 2
+#define _ARROWS 3
 
 // Custom keycodes for layer switching and dynamic symbols
 enum custom_keycodes { TO_WIN = SAFE_RANGE, TO_MAC, PREV_WORD, NEXT_WORD, DELETE_WORD, SELECT_LINE };
@@ -99,45 +101,50 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                               KC_TRNS , KC_TRNS ,                     KC_TRNS     , KC_TRNS                                              ,
                                               KC_TRNS , KC_TRNS ,                     SELECT_LINE , KC_TRNS                                              ,
                                               KC_TRNS , KC_TRNS ,                     TO_WIN      , TO_MAC                                               
+),
+
+//    ┌─────────┬────┬───────────┬───────────┬─────┬─────┐                   ┌─────────────┬────────┬──────┬──────┬─────┬─────────┐
+//    │   f12   │ f1 │    f2     │    f3     │ f4  │ f5  │                   │     f6      │   f7   │  f8  │  f9  │ f10 │   f11   │
+//    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├─────────────┼────────┼──────┼──────┼─────┼─────────┤
+//    │  volu   │ {  │     (     │     )     │  }  │ ins │                   │    pgup     │   ~    │  up  │  `   │  :  │  mute   │
+//    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├─────────────┼────────┼──────┼──────┼─────┼─────────┤
+//    │  vold   │ !  │     @     │     #     │  $  │  %  │                   │      ^      │   l    │ down │ rght │  -  │    "    │
+//    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├─────────────┼────────┼──────┼──────┼─────┼─────────┤
+//    │ QK_BOOT │ <  │     [     │     ]     │  >  │ del │                   │    pgdn     │   \    │  |   │  +   │  ?  │ LGUI(`) │
+//    └─────────┴────┼───────────┼───────────┼─────┴─────┘                   └─────────────┴────────┼──────┼──────┼─────┴─────────┘
+//                   │ PREV_WORD │ NEXT_WORD │                                                      │ down │  up  │                
+//                   └───────────┴───────────┼─────┬─────┐                   ┌─────────────┬────────┼──────┴──────┘                
+//                                           │     │     │                   │             │        │                              
+//                                           ├─────┼─────┤                   ├─────────────┼────────┤                              
+//                                           │     │     │                   │ SELECT_LINE │        │                              
+//                                           ├─────┼─────┤                   ├─────────────┼────────┤                              
+//                                           │     │     │                   │   TO_WIN    │ TO_MAC │                              
+//                                           └─────┴─────┘                   └─────────────┴────────┘                              
+[_ARROWS] = LAYOUT_5x6(
+  KC_F12  , KC_F1   , KC_F2     , KC_F3     , KC_F4   , KC_F5   ,                     KC_F6       , KC_F7    , KC_F8   , KC_F9    , KC_F10  , KC_F11      ,
+  KC_VOLU , KC_LCBR , KC_LPRN   , KC_RPRN   , KC_RCBR , KC_INS  ,                     KC_PGUP     , KC_TILDE , KC_UP   , KC_GRV   , KC_COLN , KC_MUTE     ,
+  KC_VOLD , KC_EXLM , KC_AT     , KC_HASH   , KC_DLR  , KC_PERC ,                     KC_CIRC     , KC_L     , KC_DOWN , KC_RIGHT , KC_MINS , KC_DQUO     ,
+  QK_BOOT , KC_LT   , KC_LBRC   , KC_RBRC   , KC_GT   , KC_DEL  ,                     KC_PGDN     , KC_BSLS  , KC_PIPE , KC_PLUS  , KC_QUES , LGUI(KC_GRV),
+                      PREV_WORD , NEXT_WORD ,                                                                  KC_DOWN , KC_UP                            ,
+                                              KC_TRNS , KC_TRNS ,                     KC_TRNS     , KC_TRNS                                               ,
+                                              KC_TRNS , KC_TRNS ,                     SELECT_LINE , KC_TRNS                                               ,
+                                              KC_TRNS , KC_TRNS ,                     TO_WIN      , TO_MAC                                                
 )
 };
 
-const uint16_t PROGMEM delete_word_combo[] = {KC_BSPC , KC_SPC, COMBO_END};
-combo_t        key_combos[]                 = {
-    [DELETE_WORD_COMBO] = {.keys = &(delete_word_combo)[0], .keycode = (KC_NO)} // KC_NO as we'll handle this in process_combo_event
-};
+bool isMac(void) {
+    return get_highest_layer(layer_state);
+}
 
-void process_combo_event(uint16_t combo_index, bool pressed) {
-    switch (combo_index) {
-        case DELETE_WORD_COMBO:
-            if (pressed) {
-                switch (get_highest_layer(layer_state)) {
-                    case _WIN:
-                        register_code16(C(KC_BSPC));
-                        break;
-                    case _MAC:
-                        register_code16(A(KC_BSPC));
-                        break;
-                    default:
-                        register_code16(C(KC_BSPC));
-                        break;
-                }
-            } else {
-                switch (get_highest_layer(layer_state)) {
-                    case _WIN:
-                        unregister_code16(C(KC_BSPC));
-                        break;
-                    case _MAC:
-                        unregister_code16(A(KC_BSPC));
-                        break;
-                    default:
-                        unregister_code16(C(KC_BSPC));
-                        break;
-                }
-            }
-            break;
+void delete_word(bool pressed) {
+    const uint16_t kc = isMac() ? C(KC_BSPC) : A(KC_BSPC);
+    if (pressed) {
+        register_code16(kc);
+    } else {
+        unregister_code16(kc);
     }
 }
+
 
 void to_win(void) {
     set_single_persistent_default_layer(_WIN);
@@ -154,20 +161,18 @@ void to_mac(void) {
 }
 
 enum { LEFT = 0, RIGHT = 1 };
-
-void adjacent_word(keyrecord_t *record, uint8_t direction) {
+void adjacent_word(bool pressed, uint8_t direction) {
     const uint8_t  kc     = direction == LEFT ? KC_LEFT : KC_RIGHT;
-    const uint16_t code16 = layer_state_is(_MAC) ? A(kc) : C(kc);
-    if (record->event.pressed) {
+    const uint16_t code16 = isMac() ? A(kc) : C(kc);
+    if (pressed) {
         register_code16(code16);
     } else {
         unregister_code16(code16);
     }
 }
 
-void select_line(keyrecord_t *record) {
-    if (layer_state_is(_MAC)) {
-        // goto beginning of line then select to end of line
+void select_line(bool pressed) {
+    if (isMac()) {
         tap_code16(G(KC_LEFT));
         tap_code16(S(G(KC_RIGHT)));
     } else {
@@ -176,7 +181,19 @@ void select_line(keyrecord_t *record) {
     }
 }
 
+const uint16_t PROGMEM delete_word_combo[] = {KC_BSPC, KC_SPC, COMBO_END};
+combo_t                key_combos[]        = {[DELETE_WORD_COMBO] = {.keys = &(delete_word_combo)[0], .keycode = (KC_NO)}};
+
+void process_combo_event(uint16_t combo_index, bool pressed) {
+    switch (combo_index) {
+        case DELETE_WORD_COMBO:
+            delete_word(pressed);
+            break;
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    const bool pressed = record->event.pressed;
     switch (keycode) {
         case TO_WIN:
             to_win();
@@ -185,15 +202,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             to_mac();
             return false;
         case PREV_WORD:
-            adjacent_word(record, LEFT);
+            adjacent_word(pressed, LEFT);
             return false;
         case NEXT_WORD:
-            adjacent_word(record, RIGHT);
+            adjacent_word(pressed, RIGHT);
             return false;
         case SELECT_LINE:
-            select_line(record);
+            select_line(pressed);
             return false;
-
         default:
             return true;
     }
