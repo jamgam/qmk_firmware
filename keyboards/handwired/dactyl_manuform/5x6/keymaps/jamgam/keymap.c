@@ -1,4 +1,6 @@
-#include "action_layer.h"
+#include <avr/pgmspace.h>
+#include <stdint.h>
+#include "keycodes.h"
 #include "keymap_us.h"
 #include QMK_KEYBOARD_H
 
@@ -169,8 +171,37 @@ void select_line(bool pressed) {
 
 const uint16_t PROGMEM delete_word_combo[] = {LT(_SYMBOLS, KC_BSPC), KC_SPC, COMBO_END};
 
+// right side symbols
+// home row
+const uint16_t PROGMEM minus_combo[] = {KC_Z, KC_O, COMBO_END};
+const uint16_t PROGMEM equals_combo[] = {KC_Z, KC_I, COMBO_END};
+const uint16_t PROGMEM asterisk_combo[] = {KC_Z, KC_E, COMBO_END};
+const uint16_t PROGMEM ampr_combo[] = {KC_Z, KC_N, COMBO_END};
+const uint16_t PROGMEM carot_combo[] = {KC_Z, KC_M, COMBO_END};
+// top row
+const uint16_t PROGMEM backtick_combo[] = {KC_Z, KC_Y, COMBO_END};
+const uint16_t PROGMEM underscore_combo[] = {KC_Z, KC_U, COMBO_END};
+const uint16_t PROGMEM tildes_combo[] = {KC_Z, KC_L, COMBO_END};
+// bottom row
+const uint16_t PROGMEM backslash_combo[] = {KC_Z, KC_H, COMBO_END};
+const uint16_t PROGMEM pipe_combo[] = {KC_Z, KC_COMMA, COMBO_END};
+const uint16_t PROGMEM plue_combo[] = {KC_Z, KC_DOT, COMBO_END};
+
+// left side symbols
+
 combo_t key_combos[] = {
     [DELETE_WORD_COMBO] = COMBO(delete_word_combo, KC_NO),
+    COMBO(minus_combo, KC_MINUS),
+    COMBO(equals_combo, KC_EQUAL),
+    COMBO(asterisk_combo, KC_EQUAL),
+    COMBO(ampr_combo, KC_AMPR),
+    COMBO(carot_combo, KC_CIRC),
+    COMBO(backtick_combo, KC_GRAVE),
+    COMBO(underscore_combo, KC_UNDERSCORE),
+    COMBO(tildes_combo, KC_TILDE),
+    COMBO(backslash_combo, KC_BACKSLASH),
+    COMBO(pipe_combo, KC_PIPE),
+    COMBO(tildes_combo, KC_TILDE),
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
