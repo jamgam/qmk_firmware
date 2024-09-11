@@ -185,15 +185,32 @@ const uint16_t PROGMEM tildes_combo[] = {KC_Z, KC_L, COMBO_END};
 // bottom row
 const uint16_t PROGMEM backslash_combo[] = {KC_Z, KC_H, COMBO_END};
 const uint16_t PROGMEM pipe_combo[] = {KC_Z, KC_COMMA, COMBO_END};
-const uint16_t PROGMEM plue_combo[] = {KC_Z, KC_DOT, COMBO_END};
+const uint16_t PROGMEM plus_combo[] = {KC_Z, KC_DOT, COMBO_END};
 
 // left side symbols
+// home row
+const uint16_t PROGMEM exclamation_combo[] = {KC_SLSH, KC_A, COMBO_END};
+const uint16_t PROGMEM at_combo[] = {KC_SLSH, KC_R, COMBO_END};
+const uint16_t PROGMEM hash_combo[] = {KC_SLSH, KC_S, COMBO_END};
+const uint16_t PROGMEM dollar_combo[] = {KC_SLSH, KC_T, COMBO_END};
+const uint16_t PROGMEM percent_combo[] = {KC_SLSH, KC_G, COMBO_END};
+// top row
+const uint16_t PROGMEM lcb_combo[] = {KC_SLSH, KC_Q, COMBO_END};
+const uint16_t PROGMEM lpr_combo[] = {KC_SLSH, KC_W, COMBO_END};
+const uint16_t PROGMEM rpr_combo[] = {KC_SLSH, KC_F, COMBO_END};
+const uint16_t PROGMEM rcb_combo[] = {KC_SLSH, KC_P, COMBO_END};
+// bottom row
+const uint16_t PROGMEM lt_combo[] = {KC_SLSH, KC_Z, COMBO_END};
+const uint16_t PROGMEM lbrc_combo[] = {KC_SLSH, KC_X, COMBO_END};
+const uint16_t PROGMEM rbrc_combo[] = {KC_SLSH, KC_C, COMBO_END};
+const uint16_t PROGMEM gt_combo[] = {KC_SLSH, KC_D, COMBO_END};
 
 combo_t key_combos[] = {
     [DELETE_WORD_COMBO] = COMBO(delete_word_combo, KC_NO),
+    // right side symbols
     COMBO(minus_combo, KC_MINUS),
     COMBO(equals_combo, KC_EQUAL),
-    COMBO(asterisk_combo, KC_EQUAL),
+    COMBO(asterisk_combo, KC_ASTERISK),
     COMBO(ampr_combo, KC_AMPR),
     COMBO(carot_combo, KC_CIRC),
     COMBO(backtick_combo, KC_GRAVE),
@@ -201,7 +218,21 @@ combo_t key_combos[] = {
     COMBO(tildes_combo, KC_TILDE),
     COMBO(backslash_combo, KC_BACKSLASH),
     COMBO(pipe_combo, KC_PIPE),
-    COMBO(tildes_combo, KC_TILDE),
+    COMBO(plus_combo, KC_PLUS),
+    // left side symbols
+    COMBO(exclamation_combo, KC_EXLM),
+    COMBO(at_combo, KC_AT),
+    COMBO(hash_combo, KC_HASH),
+    COMBO(dollar_combo, KC_DLR),
+    COMBO(percent_combo, KC_PERC),
+    COMBO(lcb_combo, KC_LCBR),
+    COMBO(lpr_combo, KC_LPRN),
+    COMBO(rpr_combo, KC_RPRN),
+    COMBO(rcb_combo, KC_RCBR),
+    COMBO(lt_combo, KC_LT),
+    COMBO(lbrc_combo, KC_LBRC),
+    COMBO(rbrc_combo, KC_RBRC),
+    COMBO(gt_combo, KC_GT),
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
