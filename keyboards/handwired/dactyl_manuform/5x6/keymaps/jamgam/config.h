@@ -1,1 +1,5 @@
+#pragma once
+
 #define OS_DETECTION_KEYBOARD_RESET
+#define ONESHOT_TIMEOUT 400
+#define COMBO_TERM 50

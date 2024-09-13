@@ -77,11 +77,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //    ┌─────────┬────┬───────────┬───────────┬─────┬─────┐                   ┌─────────────┬────────┬──────┬────┬─────┬─────────┐
 //    │   f12   │ f1 │    f2     │    f3     │ f4  │ f5  │                   │     f6      │   f7   │  f8  │ f9 │ f10 │   f11   │
 //    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├─────────────┼────────┼──────┼────┼─────┼─────────┤
-//    │  volu   │ {  │     (     │     )     │  }  │ ins │                   │    pgup     │   ~    │  _   │ `  │  :  │  mute   │
+//    │  volu   │ <  │     [     │     {     │  (  │ ins │                   │    pgup     │   )    │  }   │ ]  │  >  │  mute   │
 //    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├─────────────┼────────┼──────┼────┼─────┼─────────┤
 //    │  vold   │ !  │     @     │     #     │  $  │  %  │                   │      ^      │   &    │  *   │ =  │  -  │    "    │
 //    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├─────────────┼────────┼──────┼────┼─────┼─────────┤
-//    │ LGUI(`) │ <  │     [     │     ]     │  >  │ del │                   │    pgdn     │   \    │  |   │ +  │  ?  │ QK_BOOT │
+//    │ LGUI(`) │ ~  │     _     │     `     │  :  │ del │                   │    pgdn     │   \    │  |   │ +  │  ?  │ QK_BOOT │
 //    └─────────┴────┼───────────┼───────────┼─────┴─────┘                   └─────────────┴────────┼──────┼────┼─────┴─────────┘
 //                   │ PREV_WORD │ NEXT_WORD │                                                      │ down │ up │                
 //                   └───────────┴───────────┼─────┬─────┐                   ┌─────────────┬────────┼──────┴────┘                
@@ -92,14 +92,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //                                           │     │     │                   │   TO_WIN    │ TO_MAC │                            
 //                                           └─────┴─────┘                   └─────────────┴────────┘                            
 [_SYMBOLS] = LAYOUT_5x6(
-  KC_F12       , KC_F1   , KC_F2     , KC_F3     , KC_F4   , KC_F5   ,                     KC_F6       , KC_F7    , KC_F8   , KC_F9   , KC_F10  , KC_F11 ,
-  KC_VOLU      , KC_LCBR , KC_LPRN   , KC_RPRN   , KC_RCBR , KC_INS  ,                     KC_PGUP     , KC_TILDE , KC_UNDS , KC_GRV  , KC_COLN , KC_MUTE,
-  KC_VOLD      , KC_EXLM , KC_AT     , KC_HASH   , KC_DLR  , KC_PERC ,                     KC_CIRC     , KC_AMPR  , KC_ASTR , KC_EQL  , KC_MINS , KC_DQUO,
-  LGUI(KC_GRV) , KC_LT   , KC_LBRC   , KC_RBRC   , KC_GT   , KC_DEL  ,                     KC_PGDN     , KC_BSLS  , KC_PIPE , KC_PLUS , KC_QUES , QK_BOOT,
-                           PREV_WORD , NEXT_WORD ,                                                                  KC_DOWN , KC_UP                      ,
-                                                   KC_TRNS , KC_TRNS ,                     KC_TRNS     , KC_TRNS                                         ,
-                                                   KC_TRNS , KC_TRNS ,                     SELECT_LINE , KC_TRNS                                         ,
-                                                   KC_TRNS , KC_TRNS ,                     TO_WIN      , TO_MAC                                          
+  KC_F12       , KC_F1    , KC_F2     , KC_F3     , KC_F4   , KC_F5   ,                     KC_F6       , KC_F7   , KC_F8   , KC_F9   , KC_F10  , KC_F11 ,
+  KC_VOLU      , KC_LT    , KC_LBRC   , KC_LCBR   , KC_LPRN , KC_INS  ,                     KC_PGUP     , KC_RPRN , KC_RCBR , KC_RBRC , KC_GT   , KC_MUTE,
+  KC_VOLD      , KC_EXLM  , KC_AT     , KC_HASH   , KC_DLR  , KC_PERC ,                     KC_CIRC     , KC_AMPR , KC_ASTR , KC_EQL  , KC_MINS , KC_DQUO,
+  LGUI(KC_GRV) , KC_TILDE , KC_UNDS   , KC_GRV    , KC_COLN , KC_DEL  ,                     KC_PGDN     , KC_BSLS , KC_PIPE , KC_PLUS , KC_QUES , QK_BOOT,
+                            PREV_WORD , NEXT_WORD ,                                                                 KC_DOWN , KC_UP                      ,
+                                                    KC_TRNS , KC_TRNS ,                     KC_TRNS     , KC_TRNS                                        ,
+                                                    KC_TRNS , KC_TRNS ,                     SELECT_LINE , KC_TRNS                                        ,
+                                                    KC_TRNS , KC_TRNS ,                     TO_WIN      , TO_MAC                                         
 )
 };
 
