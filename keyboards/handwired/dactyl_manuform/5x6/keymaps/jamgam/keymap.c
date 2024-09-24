@@ -1,7 +1,3 @@
-#include <avr/pgmspace.h>
-#include <stdint.h>
-#include "keycodes.h"
-#include "keymap_us.h"
 #include QMK_KEYBOARD_H
 
 // layers for windows
@@ -27,23 +23,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //    ├──────┼───┼──────┼──────┼───────────────┼───────────────┤                   ├────────────────────┼────────┼──────┼────┼───┼──────┤
 //    │ lctl │ z │  x   │  c   │       d       │       v       │                   │         k          │   h    │  ,   │ .  │ / │ end  │
 //    └──────┴───┼──────┼──────┼───────────────┴───────────────┘                   └────────────────────┴────────┼──────┼────┼───┴──────┘
-//               │ left │ rght │                                                                                 │ down │ up │           
-//               └──────┴──────┼───────────────┬───────────────┐                   ┌────────────────────┬────────┼──────┴────┘           
-//                             │ OSL(_SYMBOLS) │ OSM(MOD_LSFT) │                   │ LT(_SYMBOLS, bspc) │  spc   │                       
-//                             ├───────────────┼───────────────┤                   ├────────────────────┼────────┤                       
-//                             │     lalt      │     lctl      │                   │       OSL(3)       │  ent   │                       
-//                             ├───────────────┼───────────────┤                   ├────────────────────┼────────┤                       
-//                             │     lgui      │    OSL(3)     │                   │       TO_WIN       │ TO_MAC │                       
-//                             └───────────────┴───────────────┘                   └────────────────────┴────────┘                       
+//               │ left │ rght │                                                                                 │ down │ up │
+//               └──────┴──────┼───────────────┬───────────────┐                   ┌────────────────────┬────────┼──────┴────┘
+//                             │     lalt      │ OSM(MOD_LSFT) │                   │ LT(_SYMBOLS, bspc) │  spc   │
+//                             ├───────────────┼───────────────┤                   ├────────────────────┼────────┤
+//                             │ OSL(_SYMBOLS) │     lctl      │                   │       OSL(3)       │  ent   │
+//                             ├───────────────┼───────────────┤                   ├────────────────────┼────────┤
+//                             │     lgui      │    OSL(3)     │                   │       TO_WIN       │ TO_MAC │
+//                             └───────────────┴───────────────┘                   └────────────────────┴────────┘
 [_WIN] = LAYOUT_5x6(
   KC_LSFT , KC_1 , KC_2    , KC_3     , KC_4          , KC_5          ,                     KC_6                  , KC_7   , KC_8    , KC_9   , KC_0    , KC_HOME,
   KC_TAB  , KC_Q , KC_W    , KC_F     , KC_P          , KC_B          ,                     KC_J                  , KC_L   , KC_U    , KC_Y   , KC_SCLN , KC_BSLS,
   KC_ESC  , KC_A , KC_R    , KC_S     , KC_T          , KC_G          ,                     KC_M                  , KC_N   , KC_E    , KC_I   , KC_O    , KC_QUOT,
   KC_LCTL , KC_Z , KC_X    , KC_C     , KC_D          , KC_V          ,                     KC_K                  , KC_H   , KC_COMM , KC_DOT , KC_SLSH , KC_END ,
                    KC_LEFT , KC_RIGHT ,                                                                                      KC_DOWN , KC_UP                     ,
-                                        OSL(_SYMBOLS) , OSM(MOD_LSFT) ,                     LT(_SYMBOLS, KC_BSPC) , KC_SPC                                       ,
-                                        KC_LALT       , KC_LCTL       ,                     OSL(3)                , KC_ENT                                       ,
-                                        KC_LGUI       , OSL(3)        ,                     TO_WIN                , TO_MAC                                       
+                                        KC_LALT       , OSM(MOD_LSFT) ,                     LT(_SYMBOLS, KC_BSPC) , KC_SPC                                       ,
+                                        OSL(_SYMBOLS) , KC_LCTL       ,                     OSL(3)                , KC_ENT                                       ,
+                                        KC_LGUI       , OSL(3)        ,                     TO_WIN                , TO_MAC
 ),
 
 //    ┌──────┬───┬──────┬──────┬───────────────┬───────────────┐                   ┌────────────────────┬────────┬──────┬────┬───┬──────┐
@@ -55,14 +51,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //    ├──────┼───┼──────┼──────┼───────────────┼───────────────┤                   ├────────────────────┼────────┼──────┼────┼───┼──────┤
 //    │ lctl │ z │  x   │  c   │       d       │       v       │                   │         k          │   h    │  ,   │ .  │ / │ end  │
 //    └──────┴───┼──────┼──────┼───────────────┴───────────────┘                   └────────────────────┴────────┼──────┼────┼───┴──────┘
-//               │ left │ rght │                                                                                 │ down │ up │           
-//               └──────┴──────┼───────────────┬───────────────┐                   ┌────────────────────┬────────┼──────┴────┘           
-//                             │ OSL(_SYMBOLS) │ OSM(MOD_LSFT) │                   │ LT(_SYMBOLS, bspc) │  spc   │                       
-//                             ├───────────────┼───────────────┤                   ├────────────────────┼────────┤                       
-//                             │     lalt      │     lgui      │                   │       OSL(4)       │  ent   │                       
-//                             ├───────────────┼───────────────┤                   ├────────────────────┼────────┤                       
-//                             │     lctl      │    OSL(4)     │                   │       TO_WIN       │ TO_MAC │                       
-//                             └───────────────┴───────────────┘                   └────────────────────┴────────┘                       
+//               │ left │ rght │                                                                                 │ down │ up │
+//               └──────┴──────┼───────────────┬───────────────┐                   ┌────────────────────┬────────┼──────┴────┘
+//                             │ OSL(_SYMBOLS) │ OSM(MOD_LSFT) │                   │ LT(_SYMBOLS, bspc) │  spc   │
+//                             ├───────────────┼───────────────┤                   ├────────────────────┼────────┤
+//                             │     lalt      │     lgui      │                   │       OSL(4)       │  ent   │
+//                             ├───────────────┼───────────────┤                   ├────────────────────┼────────┤
+//                             │     lctl      │    OSL(4)     │                   │       TO_WIN       │ TO_MAC │
+//                             └───────────────┴───────────────┘                   └────────────────────┴────────┘
 [_MAC] = LAYOUT_5x6(
   KC_LSFT , KC_1 , KC_2    , KC_3     , KC_4          , KC_5          ,                     KC_6                  , KC_7   , KC_8    , KC_9   , KC_0    , KC_HOME,
   KC_TAB  , KC_Q , KC_W    , KC_F     , KC_P          , KC_B          ,                     KC_J                  , KC_L   , KC_U    , KC_Y   , KC_SCLN , KC_BSLS,
@@ -71,35 +67,35 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                    KC_LEFT , KC_RIGHT ,                                                                                      KC_DOWN , KC_UP                     ,
                                         OSL(_SYMBOLS) , OSM(MOD_LSFT) ,                     LT(_SYMBOLS, KC_BSPC) , KC_SPC                                       ,
                                         KC_LALT       , KC_LGUI       ,                     OSL(4)                , KC_ENT                                       ,
-                                        KC_LCTL       , OSL(4)        ,                     TO_WIN                , TO_MAC                                       
+                                        KC_LCTL       , OSL(4)        ,                     TO_WIN                , TO_MAC
 ),
 
 //    ┌─────────┬────┬───────────┬───────────┬─────┬─────┐                   ┌─────────────┬────────┬──────┬────┬─────┬─────────┐
 //    │   f12   │ f1 │    f2     │    f3     │ f4  │ f5  │                   │     f6      │   f7   │  f8  │ f9 │ f10 │   f11   │
 //    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├─────────────┼────────┼──────┼────┼─────┼─────────┤
-//    │  volu   │ <  │     [     │     {     │  (  │ ins │                   │    pgup     │   )    │  }   │ ]  │  >  │  mute   │
+//    │  volu   │ {  │     (     │     )     │  }  │ ins │                   │    pgup     │   ~    │  _   │ `  │  :  │  mute   │
 //    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├─────────────┼────────┼──────┼────┼─────┼─────────┤
 //    │  vold   │ !  │     @     │     #     │  $  │  %  │                   │      ^      │   &    │  *   │ =  │  -  │    "    │
 //    ├─────────┼────┼───────────┼───────────┼─────┼─────┤                   ├─────────────┼────────┼──────┼────┼─────┼─────────┤
-//    │ LGUI(`) │ ~  │     _     │     `     │  :  │ del │                   │    pgdn     │   \    │  |   │ +  │  ?  │ QK_BOOT │
+//    │ LGUI(`) │ <  │     [     │     ]     │  >  │ del │                   │    pgdn     │   \    │  |   │ +  │  ?  │ QK_BOOT │
 //    └─────────┴────┼───────────┼───────────┼─────┴─────┘                   └─────────────┴────────┼──────┼────┼─────┴─────────┘
-//                   │ PREV_WORD │ NEXT_WORD │                                                      │ down │ up │                
-//                   └───────────┴───────────┼─────┬─────┐                   ┌─────────────┬────────┼──────┴────┘                
-//                                           │     │     │                   │             │        │                            
-//                                           ├─────┼─────┤                   ├─────────────┼────────┤                            
-//                                           │     │     │                   │ SELECT_LINE │        │                            
-//                                           ├─────┼─────┤                   ├─────────────┼────────┤                            
-//                                           │     │     │                   │   TO_WIN    │ TO_MAC │                            
-//                                           └─────┴─────┘                   └─────────────┴────────┘                            
+//                   │ PREV_WORD │ NEXT_WORD │                                                      │ down │ up │
+//                   └───────────┴───────────┼─────┬─────┐                   ┌─────────────┬────────┼──────┴────┘
+//                                           │     │     │                   │             │        │
+//                                           ├─────┼─────┤                   ├─────────────┼────────┤
+//                                           │     │     │                   │ SELECT_LINE │        │
+//                                           ├─────┼─────┤                   ├─────────────┼────────┤
+//                                           │     │     │                   │   TO_WIN    │ TO_MAC │
+//                                           └─────┴─────┘                   └─────────────┴────────┘
 [_SYMBOLS] = LAYOUT_5x6(
-  KC_F12       , KC_F1    , KC_F2     , KC_F3     , KC_F4   , KC_F5   ,                     KC_F6       , KC_F7   , KC_F8   , KC_F9   , KC_F10  , KC_F11 ,
-  KC_VOLU      , KC_LT    , KC_LBRC   , KC_LCBR   , KC_LPRN , KC_INS  ,                     KC_PGUP     , KC_RPRN , KC_RCBR , KC_RBRC , KC_GT   , KC_MUTE,
-  KC_VOLD      , KC_EXLM  , KC_AT     , KC_HASH   , KC_DLR  , KC_PERC ,                     KC_CIRC     , KC_AMPR , KC_ASTR , KC_EQL  , KC_MINS , KC_DQUO,
-  LGUI(KC_GRV) , KC_TILDE , KC_UNDS   , KC_GRV    , KC_COLN , KC_DEL  ,                     KC_PGDN     , KC_BSLS , KC_PIPE , KC_PLUS , KC_QUES , QK_BOOT,
-                            PREV_WORD , NEXT_WORD ,                                                                 KC_DOWN , KC_UP                      ,
-                                                    KC_TRNS , KC_TRNS ,                     KC_TRNS     , KC_TRNS                                        ,
-                                                    KC_TRNS , KC_TRNS ,                     SELECT_LINE , KC_TRNS                                        ,
-                                                    KC_TRNS , KC_TRNS ,                     TO_WIN      , TO_MAC                                         
+  KC_F12       , KC_F1   , KC_F2     , KC_F3     , KC_F4   , KC_F5   ,                     KC_F6       , KC_F7    , KC_F8   , KC_F9   , KC_F10  , KC_F11 ,
+  KC_VOLU      , KC_LCBR , KC_LPRN   , KC_RPRN   , KC_RCBR , KC_INS  ,                     KC_PGUP     , KC_TILDE , KC_UNDS , KC_GRV  , KC_COLN , KC_MUTE,
+  KC_VOLD      , KC_EXLM , KC_AT     , KC_HASH   , KC_DLR  , KC_PERC ,                     KC_CIRC     , KC_AMPR  , KC_ASTR , KC_EQL  , KC_MINS , KC_DQUO,
+  LGUI(KC_GRV) , KC_LT   , KC_LBRC   , KC_RBRC   , KC_GT   , KC_DEL  ,                     KC_PGDN     , KC_BSLS  , KC_PIPE , KC_PLUS , KC_QUES , QK_BOOT,
+                           PREV_WORD , NEXT_WORD ,                                                                  KC_DOWN , KC_UP                      ,
+                                                   KC_TRNS , KC_TRNS ,                     KC_TRNS     , KC_TRNS                                         ,
+                                                   KC_TRNS , KC_TRNS ,                     SELECT_LINE , KC_TRNS                                         ,
+                                                   KC_TRNS , KC_TRNS ,                     TO_WIN      , TO_MAC
 )
 };
 
@@ -205,6 +201,9 @@ const uint16_t PROGMEM lbrc_combo[] = {KC_SLSH, KC_X, COMBO_END};
 const uint16_t PROGMEM rbrc_combo[] = {KC_SLSH, KC_C, COMBO_END};
 const uint16_t PROGMEM gt_combo[] = {KC_SLSH, KC_D, COMBO_END};
 
+const uint16_t PROGMEM left_symbols_combo[] = {KC_N, KC_E,KC_I, COMBO_END};
+const uint16_t PROGMEM right_symbols_combo[] = {KC_T, KC_S,KC_R, COMBO_END};
+
 combo_t key_combos[] = {
     [DELETE_WORD_COMBO] = COMBO(delete_word_combo, KC_NO),
     // right side symbols
@@ -233,6 +232,10 @@ combo_t key_combos[] = {
     COMBO(lbrc_combo, KC_LBRC),
     COMBO(rbrc_combo, KC_RBRC),
     COMBO(gt_combo, KC_GT),
+
+    // osm symbols layer
+    COMBO(left_symbols_combo, OSL(_SYMBOLS)),
+    COMBO(right_symbols_combo, OSL(_SYMBOLS)),
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
