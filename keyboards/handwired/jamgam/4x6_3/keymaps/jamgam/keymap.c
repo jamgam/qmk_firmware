@@ -12,13 +12,14 @@ enum layer_names {
 };
 
 enum combos {
+    DELETE_COMBO,
     DELETE_WORD_COMBO,
     OPEN_APPLICATION_ONE,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //    ┌───────────────┬───┬──────┬──────┬───────────────┬─────┐   ┌───────────────┬────────────────┬──────┬────┬───┬──────┐
-//    │ LT(_SYM, tab) │ q │  w   │  f   │       p       │  b  │   │       j       │       l        │  u   │ y  │ ; │  \   │
+//    │      tab      │ q │  w   │  f   │       p       │  b  │   │       j       │       l        │  u   │ y  │ ; │  \   │
 //    ├───────────────┼───┼──────┼──────┼───────────────┼─────┤   ├───────────────┼────────────────┼──────┼────┼───┼──────┤
 //    │ LT(_NUM, esc) │ a │  r   │  s   │       t       │  g  │   │       m       │       n        │  e   │ i  │ o │  '   │
 //    ├───────────────┼───┼──────┼──────┼───────────────┼─────┤   ├───────────────┼────────────────┼──────┼────┼───┼──────┤
@@ -29,7 +30,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //                               │ lalt │ OSM(MOD_LSFT) │ MOD │   │ LT(_NUM, ent) │ LT(_SYM, bspc) │ spc  │
 //                               └──────┴───────────────┴─────┘   └───────────────┴────────────────┴──────┘
 [_BASE] = LAYOUT(
-  LT(_SYM, KC_TAB) , KC_Q , KC_W    , KC_F     , KC_P          , KC_B ,     KC_J             , KC_L              , KC_U    , KC_Y   , KC_SCLN , KC_BSLS,
+  KC_TAB           , KC_Q , KC_W    , KC_F     , KC_P          , KC_B ,     KC_J             , KC_L              , KC_U    , KC_Y   , KC_SCLN , KC_BSLS,
   LT(_NUM, KC_ESC) , KC_A , KC_R    , KC_S     , KC_T          , KC_G ,     KC_M             , KC_N              , KC_E    , KC_I   , KC_O    , KC_QUOT,
   KC_RCTL          , KC_Z , KC_X    , KC_C     , KC_D          , KC_V ,     KC_K             , KC_H              , KC_COMM , KC_DOT , KC_SLSH , KC_LGUI,
                             KC_LEFT , KC_RIGHT ,                                                                   KC_DOWN , KC_UP                     ,
@@ -55,20 +56,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                        KC_TRNS   , KC_TRNS , KC_TRNS ,     KC_TRNS , KC_TRNS  , KC_TRNS
 ),
 
-//    ┌─────┬─────┬─────┬─────┬─────┬─────────┐   ┌─────┬─────┬─────┬───┬─────┬─────┐
-//    │     │ f12 │ f7  │ f8  │ f9  │ EE_CLR  │   │     │  7  │  8  │ 9 │  *  │  /  │
-//    ├─────┼─────┼─────┼─────┼─────┼─────────┤   ├─────┼─────┼─────┼───┼─────┼─────┤
-//    │     │ f11 │ f4  │ f5  │ f6  │         │   │     │  4  │  5  │ 6 │     │  -  │
-//    ├─────┼─────┼─────┼─────┼─────┼─────────┤   ├─────┼─────┼─────┼───┼─────┼─────┤
-//    │     │ f10 │ f1  │ f2  │ f3  │ QK_BOOT │   │  0  │  1  │  2  │ 3 │  +  │     │
-//    └─────┴─────┼─────┼─────┼─────┴─────────┘   └─────┴─────┼─────┼───┼─────┴─────┘
+//    ┌─────┬─────┬─────┬─────┬─────┬─────────┐   ┌─────┬─────┬─────┬───┬───┬─────┐
+//    │     │ f12 │ f7  │ f8  │ f9  │ EE_CLR  │   │     │  7  │  8  │ 9 │ * │  /  │
+//    ├─────┼─────┼─────┼─────┼─────┼─────────┤   ├─────┼─────┼─────┼───┼───┼─────┤
+//    │     │ f11 │ f4  │ f5  │ f6  │         │   │     │  4  │  5  │ 6 │ - │     │
+//    ├─────┼─────┼─────┼─────┼─────┼─────────┤   ├─────┼─────┼─────┼───┼───┼─────┤
+//    │     │ f10 │ f1  │ f2  │ f3  │ QK_BOOT │   │  0  │  1  │  2  │ 3 │ + │     │
+//    └─────┴─────┼─────┼─────┼─────┴─────────┘   └─────┴─────┼─────┼───┼───┴─────┘
 //                │     │     │                               │  0  │ . │
 //                └─────┼─────┼─────┬─────────┐   ┌─────┬─────┼─────┼───┘
 //                      │     │     │         │   │     │     │     │
 //                      └─────┴─────┴─────────┘   └─────┴─────┴─────┘
 [_NUM] = LAYOUT(
   KC_TRNS , KC_F12 , KC_F7   , KC_F8   , KC_F9   , EE_CLR  ,     KC_TRNS , KC_7    , KC_8    , KC_9   , KC_ASTR , KC_SLASH,
-  KC_TRNS , KC_F11 , KC_F4   , KC_F5   , KC_F6   , KC_TRNS ,     KC_TRNS , KC_4    , KC_5    , KC_6   , KC_TRNS , KC_MINS ,
+  KC_TRNS , KC_F11 , KC_F4   , KC_F5   , KC_F6   , KC_TRNS ,     KC_TRNS , KC_4    , KC_5    , KC_6   , KC_MINS , KC_TRNS ,
   KC_TRNS , KC_F10 , KC_F1   , KC_F2   , KC_F3   , QK_BOOT ,     KC_0    , KC_1    , KC_2    , KC_3   , KC_PLUS , KC_TRNS ,
                      KC_TRNS , KC_TRNS ,                                             KC_0    , KC_DOT                     ,
                                KC_TRNS , KC_TRNS , KC_TRNS ,     KC_TRNS , KC_TRNS , KC_TRNS
@@ -139,8 +140,10 @@ void main_modifier(bool pressed) {
 
 // COMBO DEFS
 const uint16_t PROGMEM delete_word_combo[]    = {LT(_SYM, KC_BSPC), KC_SPC, COMBO_END};
+const uint16_t PROGMEM delete_combo[]    = {KC_D, KC_V, COMBO_END};
 combo_t                key_combos[]           = {
     [DELETE_WORD_COMBO]    = COMBO_ACTION(delete_word_combo),
+    [DELETE_COMBO]    = COMBO(delete_combo, KC_DEL),
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
