@@ -15,7 +15,7 @@ enum layer_names {
 enum combos {
     DELETE_COMBO,
     DELETE_WORD_COMBO,
-    DELETE_WORD_COMBO_2,
+    SHORTCUTS_COMBO,
     OPEN_APPLICATION_ONE,
 };
 
@@ -77,28 +77,36 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                KC_TRNS , KC_TRNS , KC_TRNS ,     KC_TRNS , KC_TRNS , KC_TRNS
 ),
 
-//    ┌─────┬─────┬─────┬─────┬─────┬─────────┐   ┌─────┬─────┬─────┬───┬─────┬─────┐
-//    │     │ f12 │ f7  │ f8  │ f9  │ EE_CLR  │   │     │  7  │  8  │ 9 │  *  │  /  │
-//    ├─────┼─────┼─────┼─────┼─────┼─────────┤   ├─────┼─────┼─────┼───┼─────┼─────┤
-//    │     │ f11 │ f4  │ f5  │ f6  │         │   │     │  4  │  5  │ 6 │     │  -  │
-//    ├─────┼─────┼─────┼─────┼─────┼─────────┤   ├─────┼─────┼─────┼───┼─────┼─────┤
-//    │     │ f10 │ f1  │ f2  │ f3  │ QK_BOOT │   │  0  │  1  │  2  │ 3 │  +  │     │
-//    └─────┴─────┼─────┼─────┼─────┴─────────┘   └─────┴─────┼─────┼───┼─────┴─────┘
-//                │     │     │                               │  0  │ . │
-//                └─────┼─────┼─────┬─────────┐   ┌─────┬─────┼─────┼───┘
-//                      │     │     │         │   │     │     │     │
-//                      └─────┴─────┴─────────┘   └─────┴─────┴─────┘
+//    ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
+//    │     │     │     │     │     │     │   │     │     │     │     │     │     │
+//    ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+//    │     │  1  │  2  │  3  │  4  │  5  │   │     │     │     │     │     │     │
+//    ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+//    │     │     │     │     │     │     │   │     │     │     │     │     │     │
+//    └─────┴─────┼─────┼─────┼─────┴─────┘   └─────┴─────┼─────┼─────┼─────┴─────┘
+//                │     │     │                           │     │     │
+//                └─────┼─────┼─────┬─────┐   ┌─────┬─────┼─────┼─────┘
+//                      │     │     │     │   │     │     │     │
+//                      └─────┴─────┴─────┘   └─────┴─────┴─────┘
 [_SHORTCUTS] = LAYOUT(
-  KC_TRNS , KC_F12 , KC_F7   , KC_F8   , KC_F9   , EE_CLR  ,     KC_TRNS , KC_7    , KC_8    , KC_9   , KC_ASTR , KC_SLASH,
-  KC_TRNS , KC_F11 , KC_F4   , KC_F5   , KC_F6   , KC_TRNS ,     KC_TRNS , KC_4    , KC_5    , KC_6   , KC_TRNS , KC_MINS ,
-  KC_TRNS , KC_F10 , KC_F1   , KC_F2   , KC_F3   , QK_BOOT ,     KC_0    , KC_1    , KC_2    , KC_3   , KC_PLUS , KC_TRNS ,
-                     KC_TRNS , KC_TRNS ,                                             KC_0    , KC_DOT                     ,
-                               KC_TRNS , KC_TRNS , KC_TRNS ,     KC_TRNS , KC_TRNS , KC_TRNS
+  KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS ,     KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS,
+  KC_TRNS , KC_1    , KC_2    , KC_3    , KC_4    , KC_5    ,     KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS,
+  KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS ,     KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS,
+                      KC_TRNS , KC_TRNS ,                                             KC_TRNS , KC_TRNS                    ,
+                                KC_TRNS , KC_TRNS , KC_TRNS ,     KC_TRNS , KC_TRNS , KC_TRNS
 )
 };
 
 bool is_mac(void) {
     return detected_host_os() == OS_MACOS || detected_host_os() == OS_IOS;
+}
+
+void app_shortcuts_mod (bool pressed) {
+    if (pressed) {
+        register_code(KC_LGUI);
+    } else {
+        unregister_code(KC_LGUI);
+    }
 }
 
 void delete_word(bool pressed) {
@@ -142,24 +150,42 @@ void main_modifier(bool pressed) {
 
 // COMBO DEFS
 const uint16_t PROGMEM delete_word_combo[]    = {LT(_SYM, KC_BSPC), KC_SPC, COMBO_END};
-const uint16_t PROGMEM delete_word_combo_2[]    = {LT(_SYM, KC_BSPC), LT(_NUM, KC_ENT) , COMBO_END};
 const uint16_t PROGMEM delete_combo[]    = {KC_D, KC_V, COMBO_END};
+const uint16_t PROGMEM shortcuts_combo[]    = {KC_RCTL, MOD, COMBO_END};
 combo_t                key_combos[]           = {
     [DELETE_WORD_COMBO]    = COMBO_ACTION(delete_word_combo),
     [DELETE_COMBO]    = COMBO(delete_combo, KC_DEL),
-    [DELETE_WORD_COMBO_2]    = COMBO_ACTION(delete_word_combo_2),
+    [SHORTCUTS_COMBO] = COMBO_ACTION(shortcuts_combo),
 };
+
+bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
+    switch (combo_index) {
+        case SHORTCUTS_COMBO:
+            if (is_mac()) {
+                return false;
+            }
+    }
+
+    return true;
+}
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
     switch (combo_index) {
         case DELETE_WORD_COMBO:
             delete_word(pressed);
             break;
-        case DELETE_WORD_COMBO_2:
-            delete_word(pressed);
+        case SHORTCUTS_COMBO:
+            if (pressed) {
+                register_code(KC_LGUI);
+                layer_on(_SHORTCUTS);
+            } else {
+                unregister_code(KC_LGUI);
+                layer_off(_SHORTCUTS);
+            }
             break;
     }
 }
+
 
 // CUSTOM KEY HANDLERS
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -182,11 +208,5 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
-const key_override_t delete_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_BSPC, KC_DEL);
-
-// This globally defines all key overrides to be used
-const key_override_t *key_overrides[] = {
-	&delete_key_override
-};
-
-
+const key_override_t delete_key_override = ko_make_basic(MOD_MASK_SHIFT, LT(_SYM, KC_BSPC), KC_DEL);
+const key_override_t *key_overrides[] = {&delete_key_override};
