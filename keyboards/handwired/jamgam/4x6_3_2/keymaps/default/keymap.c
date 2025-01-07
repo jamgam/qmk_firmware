@@ -1,5 +1,6 @@
 // Copyright 2023 Adam Tombleson (@rekarnar)
 // SPDX-License-Identifier: GPL-2.0-or-later
+#include "action.h"
 #include "keycodes.h"
 #include QMK_KEYBOARD_H
 
@@ -177,10 +178,10 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
         case SHORTCUTS_COMBO:
             if (pressed) {
                 register_code(KC_LGUI);
-                layer_on(_SHORTCUTS);
+                is_mac() ? register_code(KC_LCTL) : layer_on(_SHORTCUTS);
             } else {
                 unregister_code(KC_LGUI);
-                layer_off(_SHORTCUTS);
+                is_mac() ? unregister_code(KC_LCTL) : layer_off(_SHORTCUTS);
             }
             break;
     }
