@@ -1,6 +1,5 @@
 // Copyright 2023 Adam Tombleson (@rekarnar)
 // SPDX-License-Identifier: GPL-2.0-or-later
-#include "action.h"
 #include "keycodes.h"
 #include QMK_KEYBOARD_H
 
@@ -21,23 +20,23 @@ enum combos {
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-//    ┌───────────────┬───┬──────┬──────┬───────────────┬─────┐   ┌───────────────┬────────────────┬──────┬────┬───┬──────┐
-//    │      tab      │ q │  w   │  f   │       p       │  b  │   │       j       │       l        │  u   │ y  │ ; │  \   │
-//    ├───────────────┼───┼──────┼──────┼───────────────┼─────┤   ├───────────────┼────────────────┼──────┼────┼───┼──────┤
-//    │ LT(_NUM, esc) │ a │  r   │  s   │       t       │  g  │   │       m       │       n        │  e   │ i  │ o │  '   │
-//    ├───────────────┼───┼──────┼──────┼───────────────┼─────┤   ├───────────────┼────────────────┼──────┼────┼───┼──────┤
-//    │     rctl      │ z │  x   │  c   │       d       │  v  │   │       k       │       h        │  ,   │ .  │ / │ lgui │
-//    └───────────────┴───┼──────┼──────┼───────────────┴─────┘   └───────────────┴────────────────┼──────┼────┼───┴──────┘
-//                        │ left │ rght │                                                          │ down │ up │
-//                        └──────┼──────┼───────────────┬─────┐   ┌───────────────┬────────────────┼──────┼────┘
-//                               │ lalt │ OSM(MOD_LSFT) │ MOD │   │ LT(_NUM, ent) │ LT(_SYM, bspc) │ spc  │
-//                               └──────┴───────────────┴─────┘   └───────────────┴────────────────┴──────┘
+//    ┌───────────────┬───┬──────┬──────┬───────────────┬─────┐   ┌─────┬────────────────┬──────┬────┬───┬─────────────┐
+//    │      tab      │ q │  w   │  f   │       p       │  b  │   │  j  │       l        │  u   │ y  │ ; │      \      │
+//    ├───────────────┼───┼──────┼──────┼───────────────┼─────┤   ├─────┼────────────────┼──────┼────┼───┼─────────────┤
+//    │ LT(_NUM, esc) │ a │  r   │  s   │       t       │  g  │   │  m  │       n        │  e   │ i  │ o │ LT(_SYM, ') │
+//    ├───────────────┼───┼──────┼──────┼───────────────┼─────┤   ├─────┼────────────────┼──────┼────┼───┼─────────────┤
+//    │     rctl      │ z │  x   │  c   │       d       │  v  │   │  k  │       h        │  ,   │ .  │ / │    lgui     │
+//    └───────────────┴───┼──────┼──────┼───────────────┴─────┘   └─────┴────────────────┼──────┼────┼───┴─────────────┘
+//                        │ left │ rght │                                                │ down │ up │
+//                        └──────┼──────┼───────────────┬─────┐   ┌─────┬────────────────┼──────┼────┘
+//                               │ lalt │ OSM(MOD_LSFT) │ MOD │   │ ent │ LT(_SYM, bspc) │ spc  │
+//                               └──────┴───────────────┴─────┘   └─────┴────────────────┴──────┘
 [_BASE] = LAYOUT(
-  KC_TAB           , KC_Q , KC_W    , KC_F     , KC_P          , KC_B ,     KC_J             , KC_L              , KC_U    , KC_Y   , KC_SCLN , KC_BSLS,
-  LT(_NUM, KC_ESC) , KC_A , KC_R    , KC_S     , KC_T          , KC_G ,     KC_M             , KC_N              , KC_E    , KC_I   , KC_O    , KC_QUOT,
-  KC_RCTL          , KC_Z , KC_X    , KC_C     , KC_D          , KC_V ,     KC_K             , KC_H              , KC_COMM , KC_DOT , KC_SLSH , KC_LGUI,
-                            KC_LEFT , KC_RIGHT ,                                                                   KC_DOWN , KC_UP                     ,
-                                      KC_LALT  , OSM(MOD_LSFT) , MOD  ,     LT(_NUM, KC_ENT) , LT(_SYM, KC_BSPC) , KC_SPC
+  KC_TAB           , KC_Q , KC_W    , KC_F     , KC_P          , KC_B ,     KC_J   , KC_L              , KC_U    , KC_Y   , KC_SCLN , KC_BSLS          ,
+  LT(_NUM, KC_ESC) , KC_A , KC_R    , KC_S     , KC_T          , KC_G ,     KC_M   , KC_N              , KC_E    , KC_I   , KC_O    , LT(_SYM, KC_QUOT),
+  KC_RCTL          , KC_Z , KC_X    , KC_C     , KC_D          , KC_V ,     KC_K   , KC_H              , KC_COMM , KC_DOT , KC_SLSH , KC_LGUI          ,
+                            KC_LEFT , KC_RIGHT ,                                                         KC_DOWN , KC_UP                               ,
+                                      KC_LALT  , OSM(MOD_LSFT) , MOD  ,     KC_ENT , LT(_SYM, KC_BSPC) , KC_SPC
 ),
 
 //    ┌─────────┬───┬───────────┬───────────┬─────┬─────┐   ┌──────┬─────┬──────┬────┬───┬─────────┐
@@ -102,7 +101,7 @@ bool is_mac(void) {
     return detected_host_os() == OS_MACOS || detected_host_os() == OS_IOS;
 }
 
-void app_shortcuts_mod (bool pressed) {
+void app_shortcuts_mod(bool pressed) {
     if (pressed) {
         register_code(KC_LGUI);
     } else {
@@ -150,13 +149,13 @@ void main_modifier(bool pressed) {
 }
 
 // COMBO DEFS
-const uint16_t PROGMEM delete_word_combo[]    = {LT(_SYM, KC_BSPC), KC_SPC, COMBO_END};
-const uint16_t PROGMEM delete_combo[]    = {KC_D, KC_V, COMBO_END};
-const uint16_t PROGMEM shortcuts_combo[]    = {KC_RCTL, MOD, COMBO_END};
-combo_t                key_combos[]           = {
-    [DELETE_WORD_COMBO]    = COMBO_ACTION(delete_word_combo),
-    [DELETE_COMBO]    = COMBO(delete_combo, KC_DEL),
-    [SHORTCUTS_COMBO] = COMBO_ACTION(shortcuts_combo),
+const uint16_t PROGMEM delete_word_combo[] = {LT(_SYM, KC_BSPC), KC_SPC, COMBO_END};
+const uint16_t PROGMEM delete_combo[]      = {KC_D, KC_V, COMBO_END};
+const uint16_t PROGMEM shortcuts_combo[]   = {KC_RCTL, MOD, COMBO_END};
+combo_t                key_combos[]        = {
+    [DELETE_WORD_COMBO] = COMBO_ACTION(delete_word_combo),
+    [DELETE_COMBO]      = COMBO(delete_combo, KC_DEL),
+    [SHORTCUTS_COMBO]   = COMBO_ACTION(shortcuts_combo),
 };
 
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
@@ -187,7 +186,6 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
     }
 }
 
-
 // CUSTOM KEY HANDLERS
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     const bool pressed = record->event.pressed;
@@ -209,5 +207,3 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
-const key_override_t delete_key_override = ko_make_basic(MOD_MASK_SHIFT, LT(_SYM, KC_BSPC), KC_DEL);
-const key_override_t *key_overrides[] = {&delete_key_override};
