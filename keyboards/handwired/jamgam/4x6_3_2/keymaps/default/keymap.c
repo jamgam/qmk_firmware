@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 #include "keycodes.h"
 #include "keymap_us.h"
+#include "process_combo.h"
 #include QMK_KEYBOARD_H
 
 enum custom_keycodes {  TO_WIN = SAFE_RANGE, TO_MAC,PREV_WORD, NEXT_WORD, DELETE_WORD, SELECT_LINE, MOD };
@@ -19,9 +20,29 @@ enum combos {
     DELETE_WORD_COMBO,
     SHORTCUTS_COMBO,
     OPEN_APPLICATION_ONE,
+    GAMING_COMBO
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+//    ┌─────┬──────┬──────┬─────┬─────┬───┐   ┌─────┬───────────┬──────────┬──────┬───┬───┐
+//    │ tab │  t   │  q   │  w  │  e  │ r │   │  t  │     y     │    u     │  i   │ o │ p │
+//    ├─────┼──────┼──────┼─────┼─────┼───┤   ├─────┼───────────┼──────────┼──────┼───┼───┤
+//    │  m  │ lsft │  a   │  s  │  d  │ f │   │  g  │     h     │    j     │  k   │ l │ ; │
+//    ├─────┼──────┼──────┼─────┼─────┼───┤   ├─────┼───────────┼──────────┼──────┼───┼───┤
+//    │  3  │ lctl │  z   │  x  │  c  │ v │   │  b  │     n     │    m     │  ,   │ . │ / │
+//    └─────┴──────┼──────┼─────┼─────┴───┘   └─────┴───────────┼──────────┼──────┼───┴───┘
+//                 │ lalt │ esc │                               │    up    │ rght │
+//                 └──────┼─────┼─────┬───┐   ┌─────┬───────────┼──────────┼──────┘
+//                        │  1  │ spc │ 2 │   │ ent │ DF(_BASE) │ MO(_NUM) │
+//                        └─────┴─────┴───┘   └─────┴───────────┴──────────┘
+[_GAMING] = LAYOUT(
+  KC_TAB , KC_T    , KC_Q    , KC_W   , KC_E     , KC_R ,     KC_T   , KC_Y      , KC_U     , KC_I    , KC_O   , KC_P   ,
+  KC_M   , KC_LSFT , KC_A    , KC_S   , KC_D     , KC_F ,     KC_G   , KC_H      , KC_J     , KC_K    , KC_L   , KC_SCLN,
+  KC_3   , KC_LCTL , KC_Z    , KC_X   , KC_C     , KC_V ,     KC_B   , KC_N      , KC_M     , KC_COMM , KC_DOT , KC_SLSH,
+                     KC_LALT , KC_ESC ,                                            KC_UP    , KC_RGHT                   ,
+                               KC_1   , KC_SPACE , KC_2 ,     KC_ENT , DF(_BASE) , MO(_NUM)
+),
+
 //    ┌───────────────┬───┬──────┬──────┬───────────────┬─────┐   ┌─────┬────────────────┬──────┬────┬───┬──────┐
 //    │      tab      │ q │  w   │  f   │       p       │  b  │   │  j  │       l        │  u   │ y  │ ; │  \   │
 //    ├───────────────┼───┼──────┼──────┼───────────────┼─────┤   ├─────┼────────────────┼──────┼────┼───┼──────┤
@@ -60,23 +81,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                        KC_TRNS   , KC_TRNS , KC_TRNS ,     KC_TRNS , KC_TRNS  , KC_TRNS
 ),
 
-//    ┌─────┬─────┬─────┬─────┬─────┬─────────────┐   ┌─────┬─────┬─────┬───┬───┬─────┐
-//    │     │ f12 │ f7  │ f8  │ f9  │   EE_CLR    │   │     │  7  │  8  │ 9 │ * │  /  │
-//    ├─────┼─────┼─────┼─────┼─────┼─────────────┤   ├─────┼─────┼─────┼───┼───┼─────┤
-//    │     │ f11 │ f4  │ f5  │ f6  │ TO(_GAMING) │   │     │  4  │  5  │ 6 │ - │     │
-//    ├─────┼─────┼─────┼─────┼─────┼─────────────┤   ├─────┼─────┼─────┼───┼───┼─────┤
-//    │     │ f10 │ f1  │ f2  │ f3  │   QK_BOOT   │   │  0  │  1  │  2  │ 3 │ + │  ,  │
-//    └─────┴─────┼─────┼─────┼─────┴─────────────┘   └─────┴─────┼─────┼───┼───┴─────┘
-//                │     │     │                                   │  0  │ . │
-//                └─────┼─────┼─────┬─────────────┐   ┌─────┬─────┼─────┼───┘
-//                      │     │     │             │   │     │     │     │
-//                      └─────┴─────┴─────────────┘   └─────┴─────┴─────┘
+//    ┌─────┬─────┬─────────────┬─────────────┬─────┬───────────┐   ┌───────────┬─────┬─────┬───┬───┬─────┐
+//    │     │ f12 │     f7      │     f8      │ f9  │  EE_CLR   │   │ caps_LOCK │  7  │  8  │ 9 │ * │  /  │
+//    ├─────┼─────┼─────────────┼─────────────┼─────┼───────────┤   ├───────────┼─────┼─────┼───┼───┼─────┤
+//    │     │ f11 │     f4      │     f5      │ f6  │ QK_REBOOT │   │           │  4  │  5  │ 6 │ - │     │
+//    ├─────┼─────┼─────────────┼─────────────┼─────┼───────────┤   ├───────────┼─────┼─────┼───┼───┼─────┤
+//    │     │ f10 │     f1      │     f2      │ f3  │  QK_BOOT  │   │     0     │  1  │  2  │ 3 │ + │  ,  │
+//    └─────┴─────┼─────────────┼─────────────┼─────┴───────────┘   └───────────┴─────┼─────┼───┼───┴─────┘
+//                │ TO(_GAMING) │ TO(_GAMING) │                                       │  0  │ . │
+//                └─────────────┼─────────────┼─────┬───────────┐   ┌───────────┬─────┼─────┼───┘
+//                              │             │     │           │   │           │     │     │
+//                              └─────────────┴─────┴───────────┘   └───────────┴─────┴─────┘
 [_NUM] = LAYOUT(
-  KC_TRNS , KC_F12 , KC_F7   , KC_F8   , KC_F9   , EE_CLR      ,     KC_TRNS , KC_7    , KC_8    , KC_9   , KC_ASTR , KC_SLASH,
-  KC_TRNS , KC_F11 , KC_F4   , KC_F5   , KC_F6   , TO(_GAMING) ,     KC_TRNS , KC_4    , KC_5    , KC_6   , KC_MINS , KC_TRNS ,
-  KC_TRNS , KC_F10 , KC_F1   , KC_F2   , KC_F3   , QK_BOOT     ,     KC_0    , KC_1    , KC_2    , KC_3   , KC_PLUS , KC_COMMA,
-                     KC_TRNS , KC_TRNS ,                                                 KC_0    , KC_DOT                     ,
-                               KC_TRNS , KC_TRNS , KC_TRNS     ,     KC_TRNS , KC_TRNS , KC_TRNS
+  KC_TRNS , KC_F12 , KC_F7       , KC_F8       , KC_F9   , EE_CLR    ,     KC_CAPS_LOCK , KC_7    , KC_8    , KC_9   , KC_ASTR , KC_SLASH,
+  KC_TRNS , KC_F11 , KC_F4       , KC_F5       , KC_F6   , QK_REBOOT ,     KC_TRNS      , KC_4    , KC_5    , KC_6   , KC_MINS , KC_TRNS ,
+  KC_TRNS , KC_F10 , KC_F1       , KC_F2       , KC_F3   , QK_BOOT   ,     KC_0         , KC_1    , KC_2    , KC_3   , KC_PLUS , KC_COMMA,
+                     TO(_GAMING) , TO(_GAMING) ,                                                    KC_0    , KC_DOT                     ,
+                                   KC_TRNS     , KC_TRNS , KC_TRNS   ,     KC_TRNS      , KC_TRNS , KC_TRNS
 ),
 
 //    ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
@@ -96,25 +117,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS ,     KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS,
                       KC_TRNS , KC_TRNS ,                                             KC_TRNS , KC_TRNS                    ,
                                 KC_TRNS , KC_TRNS , KC_TRNS ,     KC_TRNS , KC_TRNS , KC_TRNS
-),
-
-//    ┌───────────────┬──────┬──────┬───┬─────┬───┐   ┌───────────┬───────────┬───────────┬──────┬───┬──────┐
-//    │      tab      │  t   │  q   │ w │  e  │ r │   │     y     │     u     │     i     │  o   │ p │ bspc │
-//    ├───────────────┼──────┼──────┼───┼─────┼───┤   ├───────────┼───────────┼───────────┼──────┼───┼──────┤
-//    │ LT(_NUM, esc) │ lsft │  a   │ s │  d  │ f │   │     h     │     j     │     k     │  l   │ ; │  '   │
-//    ├───────────────┼──────┼──────┼───┼─────┼───┤   ├───────────┼───────────┼───────────┼──────┼───┼──────┤
-//    │       3       │ lctl │  z   │ x │  c  │ v │   │     n     │     m     │     ,     │  .   │ / │ lgui │
-//    └───────────────┴──────┼──────┼───┼─────┴───┘   └───────────┴───────────┼───────────┼──────┼───┴──────┘
-//                           │ lalt │ ` │                                     │    up     │ rght │
-//                           └──────┼───┼─────┬───┐   ┌───────────┬───────────┼───────────┼──────┘
-//                                  │ 1 │ spc │ 2 │   │ TO(_BASE) │ TO(_BASE) │ TO(_BASE) │
-//                                  └───┴─────┴───┘   └───────────┴───────────┴───────────┘
-[_GAMING] = LAYOUT(
-  KC_TAB           , KC_T    , KC_Q    , KC_W   , KC_E     , KC_R ,     KC_Y      , KC_U      , KC_I      , KC_O    , KC_P    , KC_BSPC,
-  LT(_NUM, KC_ESC) , KC_LSFT , KC_A    , KC_S   , KC_D     , KC_F ,     KC_H      , KC_J      , KC_K      , KC_L    , KC_SCLN , KC_QUOT,
-  KC_3             , KC_LCTL , KC_Z    , KC_X   , KC_C     , KC_V ,     KC_N      , KC_M      , KC_COMM   , KC_DOT  , KC_SLSH , KC_LGUI,
-                               KC_LALT , KC_GRV ,                                               KC_UP     , KC_RGHT                    ,
-                                         KC_1   , KC_SPACE , KC_2 ,     TO(_BASE) , TO(_BASE) , TO(_BASE)
 )
 };
 
@@ -173,10 +175,12 @@ void main_modifier(bool pressed) {
 const uint16_t PROGMEM delete_word_combo[] = {LT(_SYM, KC_BSPC), KC_SPC, COMBO_END};
 const uint16_t PROGMEM delete_combo[]      = {KC_D, KC_V, COMBO_END};
 const uint16_t PROGMEM shortcuts_combo[]   = {KC_RCTL, MOD, COMBO_END};
+const uint16_t PROGMEM gaming_combo[]   = {KC_B, KC_V, COMBO_END};
 combo_t                key_combos[]        = {
     [DELETE_WORD_COMBO] = COMBO_ACTION(delete_word_combo),
     [DELETE_COMBO]      = COMBO(delete_combo, KC_DEL),
     [SHORTCUTS_COMBO]   = COMBO_ACTION(shortcuts_combo),
+    [GAMING_COMBO]   = COMBO(gaming_combo, DF(_GAMING)),
 };
 
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
