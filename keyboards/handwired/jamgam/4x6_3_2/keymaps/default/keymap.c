@@ -1,18 +1,21 @@
-// Copyright 2023 Adam Tombleson (@rekarnar)
-// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright 2024 Adam Tombleson (@rekarnar)
+// SPDX-License-Identifier: GPL-1.0-or-later
+#include <stdint.h>
+#include "action.h"
 #include "keycodes.h"
 #include "keymap_us.h"
 #include "process_combo.h"
 #include QMK_KEYBOARD_H
+#include ".build/obj_handwired_jamgam_4x6_3_2_default/src/default_keyboard.h"
 
 enum custom_keycodes {  TO_WIN = SAFE_RANGE, TO_MAC,PREV_WORD, NEXT_WORD, DELETE_WORD, SELECT_LINE, MOD };
 
 enum layer_names {
     _BASE,
+    _GAMING,
     _SYM,
     _NUM,
     _SHORTCUTS,
-    _GAMING,
 };
 
 enum combos {
@@ -24,25 +27,6 @@ enum combos {
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-//    ┌─────┬──────┬──────┬─────┬─────┬───┐   ┌─────┬───────────┬──────────┬──────┬───┬───┐
-//    │ tab │  t   │  q   │  w  │  e  │ r │   │  t  │     y     │    u     │  i   │ o │ p │
-//    ├─────┼──────┼──────┼─────┼─────┼───┤   ├─────┼───────────┼──────────┼──────┼───┼───┤
-//    │  m  │ lsft │  a   │  s  │  d  │ f │   │  g  │     h     │    j     │  k   │ l │ ; │
-//    ├─────┼──────┼──────┼─────┼─────┼───┤   ├─────┼───────────┼──────────┼──────┼───┼───┤
-//    │  3  │ lctl │  z   │  x  │  c  │ v │   │  b  │     n     │    m     │  ,   │ . │ / │
-//    └─────┴──────┼──────┼─────┼─────┴───┘   └─────┴───────────┼──────────┼──────┼───┴───┘
-//                 │ lalt │ esc │                               │    up    │ rght │
-//                 └──────┼─────┼─────┬───┐   ┌─────┬───────────┼──────────┼──────┘
-//                        │  1  │ spc │ 2 │   │ ent │ DF(_BASE) │ MO(_NUM) │
-//                        └─────┴─────┴───┘   └─────┴───────────┴──────────┘
-[_GAMING] = LAYOUT(
-  KC_TAB , KC_T    , KC_Q    , KC_W   , KC_E     , KC_R ,     KC_T   , KC_Y      , KC_U     , KC_I    , KC_O   , KC_P   ,
-  KC_M   , KC_LSFT , KC_A    , KC_S   , KC_D     , KC_F ,     KC_G   , KC_H      , KC_J     , KC_K    , KC_L   , KC_SCLN,
-  KC_3   , KC_LCTL , KC_Z    , KC_X   , KC_C     , KC_V ,     KC_B   , KC_N      , KC_M     , KC_COMM , KC_DOT , KC_SLSH,
-                     KC_LALT , KC_ESC ,                                            KC_UP    , KC_RGHT                   ,
-                               KC_1   , KC_SPACE , KC_2 ,     KC_ENT , DF(_BASE) , MO(_NUM)
-),
-
 //    ┌───────────────┬───┬──────┬──────┬───────────────┬─────┐   ┌─────┬────────────────┬──────┬────┬───┬──────┐
 //    │      tab      │ q │  w   │  f   │       p       │  b  │   │  j  │       l        │  u   │ y  │ ; │  \   │
 //    ├───────────────┼───┼──────┼──────┼───────────────┼─────┤   ├─────┼────────────────┼──────┼────┼───┼──────┤
@@ -60,6 +44,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_RCTL          , KC_Z , KC_X    , KC_C     , KC_D          , KC_V ,     KC_K   , KC_H              , KC_COMM , KC_DOT , KC_SLSH , KC_LGUI,
                             KC_LEFT , KC_RIGHT ,                                                         KC_DOWN , KC_UP                     ,
                                       KC_LALT  , OSM(MOD_LSFT) , MOD  ,     KC_ENT , LT(_SYM, KC_BSPC) , KC_SPC
+),
+
+//    ┌─────┬──────┬──────┬─────┬─────┬───┐   ┌─────┬───────────┬─────────────┬──────┬───┬───┐
+//    │ tab │  t   │  q   │  w  │  e  │ r │   │  t  │     y     │      u      │  i   │ o │ p │
+//    ├─────┼──────┼──────┼─────┼─────┼───┤   ├─────┼───────────┼─────────────┼──────┼───┼───┤
+//    │  m  │ lsft │  a   │  s  │  d  │ f │   │  g  │     h     │      j      │  k   │ l │ ; │
+//    ├─────┼──────┼──────┼─────┼─────┼───┤   ├─────┼───────────┼─────────────┼──────┼───┼───┤
+//    │  3  │ lctl │  z   │  x  │  c  │ v │   │  b  │     n     │      m      │  ,   │ . │ / │
+//    └─────┴──────┼──────┼─────┼─────┴───┘   └─────┴───────────┼─────────────┼──────┼───┴───┘
+//                 │ lalt │ esc │                               │     up      │ rght │
+//                 └──────┼─────┼─────┬───┐   ┌─────┬───────────┼─────────────┼──────┘
+//                        │  1  │ spc │ 2 │   │ ent │ DF(_BASE) │ LT(_NUM, 4) │
+//                        └─────┴─────┴───┘   └─────┴───────────┴─────────────┘
+[_GAMING] = LAYOUT(
+  KC_TAB , KC_T    , KC_Q    , KC_W   , KC_E     , KC_R ,     KC_T   , KC_Y      , KC_U           , KC_I    , KC_O   , KC_P   ,
+  KC_M   , KC_LSFT , KC_A    , KC_S   , KC_D     , KC_F ,     KC_G   , KC_H      , KC_J           , KC_K    , KC_L   , KC_SCLN,
+  KC_3   , KC_LCTL , KC_Z    , KC_X   , KC_C     , KC_V ,     KC_B   , KC_N      , KC_M           , KC_COMM , KC_DOT , KC_SLSH,
+                     KC_LALT , KC_ESC ,                                            KC_UP          , KC_RGHT                   ,
+                               KC_1   , KC_SPACE , KC_2 ,     KC_ENT , DF(_BASE) , LT(_NUM, KC_4)
 ),
 
 //    ┌─────────┬───┬───────────┬───────────┬─────┬─────┐   ┌──────┬─────┬──────┬────┬───┬─────────┐
@@ -105,7 +108,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //    ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
 //    │     │  1  │  2  │  3  │  4  │  5  │   │     │     │     │     │     │     │
 //    ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-//    │     │     │     │     │     │     │   │     │     │     │     │     │     │
+//    │     │  6  │  7  │     │     │     │   │     │     │     │     │     │     │
 //    └─────┴─────┼─────┼─────┼─────┴─────┘   └─────┴─────┼─────┼─────┼─────┴─────┘
 //                │     │     │                           │     │     │
 //                └─────┼─────┼─────┬─────┐   ┌─────┬─────┼─────┼─────┘
@@ -114,7 +117,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_SHORTCUTS] = LAYOUT(
   KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS ,     KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS,
   KC_TRNS , KC_1    , KC_2    , KC_3    , KC_4    , KC_5    ,     KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS,
-  KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS ,     KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS,
+  KC_TRNS , KC_6    , KC_7    , KC_TRNS , KC_TRNS , KC_TRNS ,     KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS,
                       KC_TRNS , KC_TRNS ,                                             KC_TRNS , KC_TRNS                    ,
                                 KC_TRNS , KC_TRNS , KC_TRNS ,     KC_TRNS , KC_TRNS , KC_TRNS
 )
@@ -124,15 +127,7 @@ bool is_mac(void) {
     return detected_host_os() == OS_MACOS || detected_host_os() == OS_IOS;
 }
 
-void app_shortcuts_mod(bool pressed) {
-    if (pressed) {
-        register_code(KC_LGUI);
-    } else {
-        unregister_code(KC_LGUI);
-    }
-}
-
-void delete_word(bool pressed) {
+static void delete_word(bool pressed) {
     const uint16_t kc = is_mac() ? LALT(KC_BSPC) : LCTL(KC_BSPC);
     if (pressed) {
         register_code16(kc);
@@ -142,7 +137,7 @@ void delete_word(bool pressed) {
 }
 
 enum { LEFT = 0, RIGHT = 1 };
-void adjacent_word(bool pressed, uint8_t direction) {
+static void adjacent_word(bool pressed, uint8_t direction) {
     const uint8_t  kc     = direction == LEFT ? KC_LEFT : KC_RIGHT;
     const uint16_t code16 = is_mac() ? LALT(kc) : LCTL(kc);
     if (pressed) {
@@ -152,7 +147,7 @@ void adjacent_word(bool pressed, uint8_t direction) {
     }
 }
 
-void select_line(bool pressed) {
+static void select_line(bool pressed) {
     if (is_mac()) {
         tap_code16(G(KC_LEFT));
         tap_code16(S(G(KC_RIGHT)));
@@ -162,7 +157,7 @@ void select_line(bool pressed) {
     }
 }
 
-void main_modifier(bool pressed) {
+static void main_modifier(bool pressed) {
     const uint16_t code16 = is_mac() ? KC_LGUI : KC_LCTL;
     if (pressed) {
         register_code(code16);
@@ -177,22 +172,13 @@ const uint16_t PROGMEM delete_combo[]      = {KC_D, KC_V, COMBO_END};
 const uint16_t PROGMEM shortcuts_combo[]   = {KC_RCTL, MOD, COMBO_END};
 const uint16_t PROGMEM gaming_combo[]   = {KC_B, KC_V, COMBO_END};
 combo_t                key_combos[]        = {
-    [DELETE_WORD_COMBO] = COMBO_ACTION(delete_word_combo),
-    [DELETE_COMBO]      = COMBO(delete_combo, KC_DEL),
-    [SHORTCUTS_COMBO]   = COMBO_ACTION(shortcuts_combo),
-    [GAMING_COMBO]   = COMBO(gaming_combo, DF(_GAMING)),
+    [DELETE_WORD_COMBO] = COMBO_ACTION(((uint16_t[]){LT(_SYM, KC_BSPC), KC_SPC, COMBO_END})),
+    [SHORTCUTS_COMBO]   = COMBO_ACTION(((uint16_t[]){KC_RCTL, MOD, COMBO_END})),
+    COMBO(((uint16_t[]){KC_D, KC_V, COMBO_END}), KC_DEL),
+    COMBO(((uint16_t[]){KC_B, KC_V, COMBO_END}), DF(_GAMING)),
+    COMBO(((uint16_t[]){KC_P, KC_T, COMBO_END}), KC_HOME),
+    COMBO(((uint16_t[]){KC_T, KC_D, COMBO_END}), KC_END),
 };
-
-bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
-    switch (combo_index) {
-        case SHORTCUTS_COMBO:
-            if (is_mac()) {
-                return false;
-            }
-    }
-
-    return true;
-}
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
     switch (combo_index) {
