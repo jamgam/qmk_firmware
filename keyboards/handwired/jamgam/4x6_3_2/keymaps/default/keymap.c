@@ -8,7 +8,7 @@
 #include QMK_KEYBOARD_H
 #include ".build/obj_handwired_jamgam_4x6_3_2_default/src/default_keyboard.h"
 
-enum custom_keycodes {  TO_WIN = SAFE_RANGE, TO_MAC,PREV_WORD, NEXT_WORD, DELETE_WORD, SELECT_LINE, MOD };
+enum custom_keycodes { PREV_WORD = SAFE_RANGE, NEXT_WORD, SELECT_LINE, MOD };
 
 enum layer_names {
     _BASE,
@@ -123,7 +123,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 )
 };
 
-bool is_mac(void) {
+static bool is_mac(void) {
     return detected_host_os() == OS_MACOS || detected_host_os() == OS_IOS;
 }
 
@@ -167,10 +167,6 @@ static void main_modifier(bool pressed) {
 }
 
 // COMBO DEFS
-const uint16_t PROGMEM delete_word_combo[] = {LT(_SYM, KC_BSPC), KC_SPC, COMBO_END};
-const uint16_t PROGMEM delete_combo[]      = {KC_D, KC_V, COMBO_END};
-const uint16_t PROGMEM shortcuts_combo[]   = {KC_RCTL, MOD, COMBO_END};
-const uint16_t PROGMEM gaming_combo[]   = {KC_B, KC_V, COMBO_END};
 combo_t                key_combos[]        = {
     [DELETE_WORD_COMBO] = COMBO_ACTION(((uint16_t[]){LT(_SYM, KC_BSPC), KC_SPC, COMBO_END})),
     [SHORTCUTS_COMBO]   = COMBO_ACTION(((uint16_t[]){KC_RCTL, MOD, COMBO_END})),
@@ -193,6 +189,8 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
                 unregister_code(KC_LGUI);
                 is_mac() ? unregister_code(KC_LCTL) : layer_off(_SHORTCUTS);
             }
+            break;
+        default:
             break;
     }
 }
